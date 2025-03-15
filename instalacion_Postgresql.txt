@@ -1,0 +1,84 @@
+-- Instalacion postgresql Rocky Linux 9 (ultima version)
+    -- Habilitar la version 16 
+        sudo dnf module enable postgresql:16
+
+        Output:
+        ====================================================================
+         Package        Architecture  Version          Repository      Size
+        ====================================================================
+        Enabling module streams:
+         postgresql                   16                                   
+
+        Transaction Summary
+        ====================================================================
+
+        Is this ok [y/N]: 
+
+        -- Presionar 'y' y Enter
+
+    -- Instalar postgresql y postgresql-server
+        sudo dnf install postgresql-server
+    
+    -- Inicializar postgresql
+        sudo postgresql-setup --initdb
+
+    -- Habilitar postgresql 
+        sudo systemctl start postgresql
+        sudo systemctl enable postgresql
+
+
+-- Iniciar postgresql
+    sudo -u postgres psql
+
+-- Añadir seguridad y permitir accesos remotos
+    -- Actualizamos la contraseña del ususario 'postgres'
+        ALTER USER postgres WITH PASSWORD 'contraseña';
+    
+    # OPCIONAL: CREAR USUARIO
+        CREATE USER usuario WITH PASSWORD 'contraseña';
+
+    -- Salimos de postgres
+    \q
+
+    -- Editar configuracion del host.
+        sudo EDITOR_TEXTO /var/lib/pgsql/data/postgresql.conf
+
+        -- Buscar la linea:
+            #listen_addresses = 'localhost'         # what IP address(es) to listen on;
+        
+        -- Modificamosde la siguiente manera.
+            listen_addresses = '*'         # what IP address(es) to listen on;
+
+
+    -- Modificamos configuracion de seguridad
+        sudo EDITOR_TEXTO /var/lib/pgsql/data/pg_hba.conf
+
+    -- Buscar las siguientes lineas
+        # TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+        # "local" is for Unix domain socket connections only
+        local   all             all                                     peer
+        # IPv4 local connections:
+        host    all             all             127.0.0.1/32            ident
+        # IPv6 local connections:
+        host    all             all             ::1/128                 ident
+
+
+    -- Modificamos de la siguiente manera
+        # TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+        # "local" is for Unix domain socket connections only
+        local   all             all                                    md5
+        # IPv4 local connections:
+        host    all             all            0.0.0.0/0            md5
+        # IPv6 local connections:
+        host    all             all             0.0.0.0/0                 md5
+
+    -- Reiniciar postgres
+        sudo systemctl restart postgresql
+
+    -- Habilitar los puertos del firewall
+        sudo firewall-cmd --add-port=5432/tcp --permanent
+
+        -- Reiniciar servicio de firewall
+            sudo firewall-cmd --reload
