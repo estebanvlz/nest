@@ -6,10 +6,10 @@ import { Usuario } from './entities/usuario.entity';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get(':id')
-  async obtenerUsuario(@Param('id') id: number) : Promise<Usuario>{
-    return await this.usersService.obtenerUsuarioPorId(id);
-  }
+//  @Get(':id')
+//  async obtenerUsuario(@Param('id') id: number) : Promise<Usuario>{
+//    return await this.usersService.obtenerUsuarioPorEmail(id);
+//  }
 
   @Post('crear')
   async crearUsuario(@Body() usuario: Usuario) {
