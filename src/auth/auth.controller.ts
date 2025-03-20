@@ -1,21 +1,23 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from './auth.guard';
-
+import { Request } from 'express';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Public } from './decorators/isPublic.decorator';
 
 @Controller('auth')
+@Public()
 export class AuthController {
-    constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
+  
+  @Post('registro')
+  async registrar(@Body() datos: { email: string; password: string }): Promise<any> {
+    console.log(datos);
+    return this.authService.registrarUsuario(datos.email, datos.password);
+  }
 
-    @HttpCode(HttpStatus.OK)
-    @Post('login')
-    signIn(@Body() signInDto: Record<string, any>) {
-      return this.authService.signIn(signInDto.email, signInDto.contraseña);
-    }
+  @Post('login')
+  async iniciarSesion(@Body() datos: { email: string, password: string }) {
+    return this.authService.iniciarSesion(datos.email, datos.password);
+  }
 
-    @UseGuards(AuthGuard)
-    @Get('profile')
-    getProfile() {
-      return "ola";
-    }
 }
