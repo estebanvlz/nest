@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Cliente } from './cliente.entity';
+
 
 @Entity('personas')
 export class Persona {
@@ -29,9 +31,9 @@ export class Persona {
   @Column()
   tipo: number;
 
-  @Column()
-  cliente_id: number;
-
   @Column({ type: 'tinyint', nullable: true })
   genero: number;
+
+  @ManyToOne(() => Cliente, cliente => cliente.personas)
+  cliente: Cliente;
 }

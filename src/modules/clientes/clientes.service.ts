@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cliente } from 'src/common/entities/clientes/cliente.entity';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
+import { Cliente } from 'src/common/entities/clientes/cliente.entity';
 
 @Injectable()
 export class ClientesService {
@@ -12,22 +12,21 @@ export class ClientesService {
     private readonly clienteRepo: Repository<Cliente>,
   ) {}
 
-  crear(dto: CreateClienteDto) {
+  async registrar(dto: CreateClienteDto): Promise<Cliente> {
     const cliente = this.clienteRepo.create(dto);
     return this.clienteRepo.save(cliente);
   }
 
-  obtenerTodos() {
-    return this.clienteRepo.find();
+  obtenerTodos(): Promise<Cliente[]> {
+    return this.clienteRepo.find({
+      relations: ['personas', 'domicilios', 'contactos'],
+    });
   }
 
-  obtenerUno(id: number) {
-    return this.clienteRepo.findOneBy({ id });
+  obtenerPorId(id: number): Promise<any> {
+    return this.clienteRepo.findOne({
+      where: { id },
+      relations: ['personas', 'domicilios', 'contactos'],
+    });
   }
-
-  async actualizar(id: number, dto: UpdateClienteDto) {
-    await this.clienteRepo.update(id, dto);
-    return this.obtenerUno(id);
-  }
-
 }

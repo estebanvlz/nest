@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Cliente } from './cliente.entity';
+
 
 @Entity('morales')
 export class Moral {
@@ -14,6 +16,7 @@ export class Moral {
   @Column()
   actividad_economica: number;
 
-  @Column()
-  cliente_id: number;
+  @OneToOne(() => Cliente)
+  @JoinColumn()
+  cliente: Cliente;
 }

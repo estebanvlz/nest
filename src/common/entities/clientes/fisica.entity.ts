@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Cliente } from './cliente.entity';
 
-@Entity('fisica')
+@Entity('fisicas')
 export class Fisica {
   @PrimaryGeneratedColumn()
   id: number;
@@ -44,6 +45,7 @@ export class Fisica {
   @Column()
   grado_estudios: string;
 
-  @Column()
-  cliente_id: number;
+  @OneToOne(() => Cliente)
+  @JoinColumn()
+  cliente: Cliente;
 }
