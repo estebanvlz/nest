@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Rol } from "./rol.entity";
 import { Permiso } from "./permisos.entity";
 
@@ -34,12 +34,12 @@ export class Usuario {
     @JoinTable({ name: 'usuarios_permisos_bloqueados' }) 
     blockedPermissions: Permiso[];
 
-    // @Column({})
-    // createdAt: Date;
-
-    // @Column()
-    // deletedAt: Date;
-
-
-
+    @CreateDateColumn()
+    createdAt: Date;
+    
+    @UpdateDateColumn()
+    updatedAt: Date;
+    
+    @DeleteDateColumn()
+    deletedAt: Date;
 }
