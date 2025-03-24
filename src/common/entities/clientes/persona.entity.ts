@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
 import { Cliente } from './cliente.entity';
 
 
@@ -22,7 +22,7 @@ export class Persona {
   @Column()
   fecha_nac: Date;
 
-  @Column()
+  @Column({ nullable: true })
   rfc: string;
 
   @Column()
@@ -31,7 +31,7 @@ export class Persona {
   @Column()
   tipo: number;
 
-  @Column({ type: 'tinyint', nullable: true })
+  @Column({ type: 'smallint', nullable: true })
   genero: number;
 
   @ManyToOne(() => Cliente, cliente => cliente.personas)

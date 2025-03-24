@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Persona } from './persona.entity';
 
 @Entity('tipos_personas')
 export class TipoPersona {
@@ -7,4 +8,5 @@ export class TipoPersona {
 
   @Column()
   descripcion: string;
+
 }

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Persona } from './persona.entity';
 import { Cliente } from './cliente.entity';
-
 
 @Entity('morales')
 export class Moral {
@@ -16,7 +16,7 @@ export class Moral {
   @Column()
   actividad_economica: number;
 
-  @OneToOne(() => Cliente)
+  @OneToOne(() => Cliente, cliente => cliente.moral)
   @JoinColumn()
   cliente: Cliente;
 }

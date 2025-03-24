@@ -2,6 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne } from 'typ
 import { Persona } from './persona.entity';
 import { Domicilio } from './domicilio.entity';
 import { Contacto } from './contacto.entity';
+import { Fisica } from './fisica.entity';
+import { Moral } from './moral.entity';
 
 @Entity('clientes')
 export class Cliente {
@@ -17,12 +19,18 @@ export class Cliente {
   @Column()
   pais: string;
 
-  @OneToMany(() => Persona, persona => persona.cliente)
+  @OneToOne(() => Moral, moral => moral.cliente)
+  moral: Moral;
+
+  @OneToOne(() => Fisica, fisica => fisica.cliente)
+  fisica: Fisica;
+
+  @OneToMany(() => Persona, persona => persona.cliente, { cascade: true })
   personas: Persona[];
 
-  @OneToMany(() => Domicilio, domicilio => domicilio.cliente)
+  @OneToMany(() => Domicilio, domicilio => domicilio.cliente, { cascade: true })
   domicilios: Domicilio[];
 
-  @OneToMany(() => Contacto, contacto => contacto.cliente)
+  @OneToMany(() => Contacto, contacto => contacto.cliente, { cascade: true })
   contactos: Contacto[];
 }

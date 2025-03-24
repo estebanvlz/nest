@@ -6,7 +6,7 @@ export class Contacto {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'tinyint' })
+  @Column({ type: 'smallint' })
   tipo: number;
 
   @Column()
