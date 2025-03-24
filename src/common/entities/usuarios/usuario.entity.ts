@@ -10,7 +10,7 @@ export class Usuario {
     @Column()
     nombre: string;
 
-    @Column({unique: true})
+    @Column({unique: true, nullable: true})
     usuario: string;
 
     @Column({unique: true})
@@ -28,11 +28,11 @@ export class Usuario {
 
     @ManyToMany(() => Permiso, { eager: true })
     @JoinTable({ name: 'usuarios_permisos_extra' }) 
-    extraPermissions: Permiso[];
+    permisosExtra: Permiso[];
   
     @ManyToMany(() => Permiso, { eager: true })
     @JoinTable({ name: 'usuarios_permisos_bloqueados' }) 
-    blockedPermissions: Permiso[];
+    permisosBloqueados: Permiso[];
 
     @CreateDateColumn()
     createdAt: Date;

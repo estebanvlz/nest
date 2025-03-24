@@ -18,7 +18,7 @@ config();
     AuthModule, UsuariosModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '15m' },
+      signOptions: { expiresIn: '30m' },
     }) 
   ],
   controllers: [AppController],
