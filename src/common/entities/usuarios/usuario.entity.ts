@@ -19,7 +19,7 @@ export class Usuario {
     @Column()
     password: string;
 
-    @Column({default: true})
+    @Column({name: 'is_active', default: true})
     isActive: boolean;
 
     @ManyToMany(() => Rol, (rol) => rol.usuarios, {eager: true})
@@ -34,12 +34,12 @@ export class Usuario {
     @JoinTable({ name: 'usuarios_permisos_bloqueados' }) 
     permisosBloqueados: Permiso[];
 
-    @CreateDateColumn()
+    @CreateDateColumn({name: 'fecha_creacion'})
     createdAt: Date;
     
-    @UpdateDateColumn()
+    @UpdateDateColumn({name: 'fecha_actualizacion'})
     updatedAt: Date;
     
-    @DeleteDateColumn()
+    @DeleteDateColumn({name: 'fecha_eliminado'})
     deletedAt: Date;
 }
