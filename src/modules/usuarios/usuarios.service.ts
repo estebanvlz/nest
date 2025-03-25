@@ -21,14 +21,14 @@ export class UsuariosService {
   async obtenerUsuario(id: number): Promise<Usuario | null> {
     return this.usuarioRepo.findOne({
       where: { id },
-      relations: ['roles', 'roles.permisos', 'extraPermissions', 'blockedPermissions'],
+      relations: ['roles', 'roles.permisos', 'permisosExtra', 'permisosBloqueados'],
     });
   }
 
   async obtenerUsuarioPorEmail(email: string): Promise<Usuario | null> {
     return this.usuarioRepo.findOne({
       where: { email },
-      relations: ['roles', 'roles.permisos', 'extraPermissions', 'blockedPermissions'],
+      relations: ['roles', 'roles.permisos', 'permisosExtra', 'permisosBloqueados'],
     });
   }
 

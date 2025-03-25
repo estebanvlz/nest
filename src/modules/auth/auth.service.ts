@@ -103,7 +103,7 @@ export class AuthService {
       ? await this.usuariosService.obtenerPermisos(dto.permisosBloqueadosIds)
       : [];
 
-    const nuevoUsuarios = this.usuariosService.crearUsuario(
+    const nuevoUsuarios = await this.usuariosService.crearUsuario(
       dto.nombre,
       dto.email,
       passwordHash,
