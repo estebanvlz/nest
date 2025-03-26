@@ -37,10 +37,10 @@ export class Cliente{
     tipoCliente: TipoCliente;
 
     @OneToOne(() => PersonaMoral, (moral) => moral.cliente)
-    moral?: PersonaMoral;
+    personaMoral?: PersonaMoral;
   
     @OneToOne(() => PersonaFisica, (fisica) => fisica.cliente)
-    fisica?: PersonaFisica;
+    personaFisica?: PersonaFisica;
 
     @OneToMany(() => Persona, (persona) => persona.cliente)
     personas: Persona[];    

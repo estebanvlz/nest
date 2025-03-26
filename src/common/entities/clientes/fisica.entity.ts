@@ -42,11 +42,11 @@ export class PersonaFisica{
 
     // RELACIONES
 
-    @OneToOne(() => Cliente, (cliente) => cliente.fisica)
+    @OneToOne(() => Cliente, (cliente) => cliente.personaFisica)
     @JoinColumn({ name: 'cliente_id' })
     cliente: Cliente;
   
-    @OneToOne(() => Persona, (persona) => persona.fisica)
+    @OneToOne(() => Persona, (persona) => persona.personaFisica)
     @JoinColumn({ name: 'persona_id' })
     persona: Persona;
 

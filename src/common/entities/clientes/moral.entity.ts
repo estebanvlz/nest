@@ -29,7 +29,7 @@ export class PersonaMoral{
 
     // RELACIONES
 
-    @OneToOne(() => Cliente, (cliente) => cliente.moral)
+    @OneToOne(() => Cliente, (cliente) => cliente.personaMoral)
     @JoinColumn({ name: 'cliente_id' })
     cliente: Cliente;
 

@@ -49,7 +49,7 @@ export class Persona{
     // RELACIONES
 
     @OneToOne(() => PersonaFisica, (fisica) => fisica.persona)
-    fisica: PersonaFisica;
+    personaFisica: PersonaFisica;
 
     @ManyToOne(() => Cliente, (cliente) => cliente.personas)
     @JoinColumn({name: 'cliente_id'})

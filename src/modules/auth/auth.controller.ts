@@ -7,6 +7,7 @@ import { RegistroAdminDto } from './dto/registro-admin.dto';
 import { JwtAuthGuard } from 'src/common/guards/auth/jwt-auth.guard';
 import { RolesPermissionsGuard } from 'src/common/guards/auth/roles-permisos.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { RegistroPublicoDto } from './dto/registro-publico.dto';
 
 
 @Controller('auth')
@@ -21,17 +22,18 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
-  // @Post('registro')
-  // async register(@Body() dto: RegistroPublicoDto) {
-  //   return this.authService.registroPublico(dto);
-  // }
-
-  @UseGuards(RolesPermissionsGuard)
-  @Roles('admin_usuarios')
+  @Public()
   @Post('registro')
-  async register(@Body() dto: RegistroAdminDto) {
-    return this.authService.registroAdmin(dto);
+  async register(@Body() dto: RegistroPublicoDto) {
+    return this.authService.registroPublico(dto);
   }
+
+  // @UseGuards(RolesPermissionsGuard)
+  // @Roles('admin_usuarios')
+  // @Post('registro')
+  // async register(@Body() dto: RegistroAdminDto) {
+  //   return this.authService.registroAdmin(dto);
+  // }
 
   @Public()
   @Post('refresh-token')
