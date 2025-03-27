@@ -7,7 +7,7 @@ import {
   IsDefined,
 } from 'class-validator';
 import { FisicaDto } from './PersonaFisica.dto';
-import { MoralDto } from './PersonaMoral.dto';
+import { MoralDto } from './registrar-persona-moral.dto';
 
 export class RegistrarClienteDto {
   @IsOptional()

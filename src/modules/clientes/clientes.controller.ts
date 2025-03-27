@@ -4,20 +4,21 @@ import { RolesPermissionsGuard } from 'src/common/guards/auth/roles-permisos.gua
 import { RegistrarClienteDto } from './dto/RegistrarCliente.dto';
 import { Request } from 'express';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { JwtPayload } from 'src/common/interfaces/payload.interface';
 
-@Controller('clientes')
+@Controller('client')
 export class ClientesController {
   constructor(private readonly clientesService: ClientesService) {}
 
   @UseGuards(RolesPermissionsGuard)
   @Roles('usuario')
   @Post()
-  registrar(@Body() dto: RegistrarClienteDto, @Req() req: Request){
-    
+  registrar(@Body() dto: RegistrarClienteDto, @Req() req: Request & {user: JwtPayload}){
+    return this.clientesService.crearCliente(dto, req);
   }
 
-  @Get('a')
-  log(@Req() req: Request & {user: any}){
-    return this.clientesService.log(req);
+  @Get()
+  listado(){
+    return this.clientesService.obtenerClientes();
   }
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cliente } from 'src/common/entities/clientes/cliente.entity';
 import { PersonaFisica } from 'src/common/entities/clientes/fisica.entity';
@@ -10,6 +10,7 @@ import { RegistrarClienteDto } from './dto/RegistrarCliente.dto';
 import { UsuariosService } from '../usuarios/usuarios.service';
 import { Request } from 'express';
 import { JwtPayload } from 'src/common/interfaces/payload.interface';
+import { Usuario } from 'src/common/entities/usuarios/usuario.entity';
 
 @Injectable()
 export class ClientesService {
@@ -22,116 +23,94 @@ export class ClientesService {
         @InjectRepository(TipoCliente) private readonly tipoClienteRepo: Repository<TipoCliente>,
     ) {}
       
-    log(req: Request & {user :JwtPayload}){
-        
-        console.log(req.user.roles);
-        
-        return (req.user.roles)
-    }
+    
+    // async obtenerClientes(){
+    //     const clientes = await this.clienteRepo
+    //     .createQueryBuilder('cliente')
+    //     .leftJoin('cliente.tipoCliente', 'tipoCliente')
+    //     .leftJoin('cliente.personaMoral', 'personaMoral')
+    //     .leftJoin('cliente.personaFisica', 'personaFisica')
+    //     .leftJoin('cliente.creador', 'creador')
+    //     .select([
+    //       'cliente.id',
+    //       'cliente.rfc',
+    //       'cliente.serieFiel',
+    //       'cliente.actividadEconomica',
+    //       'cliente.createdAt',
+    //       'cliente.updatedAt',
+    //       'tipoCliente.id',
+    //       'personaMoral.id',
+    //       'personaMoral.razonSocial',
+    //       'personaFisica.id',
+    //       'creador.id',
+    //     ])
+    //     .getMany();
 
-    async crearCliente(dto: RegistrarClienteDto, req: Request) {
-        const tipoCliente = await this.tipoClienteRepo.findOneBy({ id: dto.tipoCliente });
-      
-        if (!req) {
+    //     return clientes;
+    // }
+
+    async crearCliente(dto: RegistrarClienteDto, req: Request & {user: JwtPayload}) {
+        try {
+
+            const userId = req.user.userId;
+            const usuario = await this.usuarioService.obtenerUsuario(userId);
+            let personaMoral;
+            let personaMoralGuardada;
+            let personaFisica;
+    
+            if(!usuario){
+                throw new NotFoundException('No se encontro el usuario');
+            }
+            
+            const tipoCliente = await this.tipoClienteRepo.findOneBy({ id: dto.tipoCliente });
+
+            if (!tipoCliente) {
+                throw new NotFoundException('No se encontro el tipo de cliente.');
+            }
+
+            if(tipoCliente.id == 1){
+
+            } else if(tipoCliente.id == 2){
+
+            } else if(tipoCliente.id == 3){
+
+                personaMoral = this.moralRepo.create({
+                    serieFiel: dto.serieFiel,
+                    razonSocial: dto.moral?.razonSocial,
+                    paisConstitucion: dto.moral?.paisConstitucion,
+                    fechaConstitucion: dto.moral?.fechaConstitucion,
+                    paginaWeb: dto.moral?.paginaWeb,
+                    creador: usuario,
+                })
+
+                personaMoralGuardada = await this.moralRepo.save(personaMoral);
+
+            } else {
+                throw new BadRequestException('El tipo de cliente no es valido.')
+            }
+
+            const cliente = this.clienteRepo.create({
+                actividadEconomica: dto.actividadEconomica,
+                rfc: dto.rfc,
+                serieFiel: dto.serieFiel,
+                tipoCliente: tipoCliente,
+                personaMoral: personaMoralGuardada,
+                personaFisica: personaFisica,
+                creador: {id: usuario.id} as Usuario
+            });
+
+            const clienteGuardado = await this.clienteRepo.save(cliente);
+
+            return clienteGuardado
+
+
+        } catch (error) {
+            
+            throw new InternalServerErrorException('Ocurrio un error al registrar el cliente')
 
         }
-        req.user;
-
-        if (!tipoCliente) {
-          throw new BadRequestException('Tipo de cliente inválido');
-        }
       
-        const cliente = this.clienteRepo.create({
-            rfc: dto.rfc,
-            serieFiel: dto.serieFiel,
-            pais: dto.pais,
-            tipoCliente: tipoCliente,
-
-        });
-      
-        const clienteGuardado = await this.clienteRepo.save(cliente);
-      
-        // if (dto.tipoPersona === 1 && dto.fisica) {
-        //   const persona = this.personaRepo.create({
-        //     nombre1: dto.fisica.primerNombre,
-        //     nombre2: dto.fisica.segundoNombre,
-        //     apellidoPaterno: dto.fisica.apellidoPaterno,
-        //     apellidoMaterno: dto.fisica.apellidoMaterno,
-        //     curp: dto.fisica.curp,
-        //     fechaNacimiento: dto.fisica.fechaNacimiento,
-        //     genero: parseInt(dto.fisica.genero),
-        //     tipo: dto.tipoPersona,
-        //   });
-        //   const personaGuardada = await this.personaRepo.save(persona);
-      
-        //   const fisica = this.fisicaRepo.create({
-        //     persona: personaGuardada,
-        //     cliente: clienteGuardado,
-        //     actividadEconomica: dto.fisica.actividadEconomica,
-        //     profesion: dto.fisica.profesion,
-        //     fechaNacimiento: dto.fisica.fechaNacimiento,
-        //     entidadNacimiento: parseInt(dto.fisica.entidadNacimiento),
-        //     estadoCivil: parseInt(dto.fisica.estadoCivil),
-        //     nacionalidad: dto.fisica.nacionalidad,
-        //     gradoEstudios: dto.fisica.gradoEstudio,
-        //   });
-      
-        //   await this.fisicaRepo.save(fisica);
-        // }
-      
-        // if (dto.tipoPersona === 2 && dto.moral) {
-        //   const moral = this.moralRepo.create({
-        //     cliente: clienteGuardado,
-        //     razonSocial: dto.moral.razonSocial,
-        //     fechaConstitucion: dto.moral.fechaConstitucion,
-        //     actividadEconomica: dto.moral.actividadEconomica,
-        //     paisConstitucion: dto.moral.paisConstitucion,
-        //     paginaWeb: dto.moral.paginaWeb,
-        //     serieFiel: dto.moral.serieFiel,
-        //   });
-      
-        //   await this.moralRepo.save(moral);
-        // }
-      
-        // return { mensaje: 'Cliente registrado exitosamente' };
       }
       
 
-    // async crearCliente(dto: RegistrarClienteDto, req: Request) {
-    //     const tipoCliente = await this.tipoClienteRepo.findOneBy({ id: dto.tipoCliente });
-      
-    //     if (!tipoCliente) {
-    //         throw new BadRequestException('Tipo de cliente inválido');
-    //     }
-      
-    //     const cliente = this.clienteRepo.create({
-             
-    //     });
-      
-    //     const clienteGuardado = await this.clienteRepo.save(cliente);
-      
-    //     if (dto.tipoPersona === 1 && dto.fisica) {
-    //         const persona = this.personaRepo.create({
-
-    //         });
-    //         const personaGuardada = await this.personaRepo.save(persona);
-      
-    //         const fisica = this.fisicaRepo.create({
-
-    //         });
-      
-    //         await this.fisicaRepo.save(fisica);
-    //     }
-      
-    //     if (dto.tipoPersona === 2 && dto.moral) {
-    //         const moral = this.moralRepo.create({
-
-    //         });
-      
-    //         await this.moralRepo.save(moral);
-    //     }
-      
-    //     return { mensaje: 'Cliente registrado exitosamente' };
-    //   }
-      
 }

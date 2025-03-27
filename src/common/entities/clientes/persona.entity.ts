@@ -52,7 +52,6 @@ export class Persona{
     personaFisica: PersonaFisica;
 
     @ManyToOne(() => Cliente, (cliente) => cliente.personas)
-    @JoinColumn({name: 'cliente_id'})
     cliente: Cliente;
 
     // DESCOMENTAR SI ES NECESARIO INCLUIR AL CREADOR DE DICHO OBJETO.

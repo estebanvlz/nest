@@ -15,8 +15,14 @@ export class PersonaMoral{
     @Column({name: 'fecha_constitucion', type: 'date' })
     fechaConstitucion: Date;
 
-    @Column({name: 'actividad_economica', type: 'int'})
-    actividadEconomica: number;
+    @Column({name: 'pais_constitucion', type: 'varchar'})
+    paisConstitucion: string;
+
+    @Column({name: 'pagina_web', type: 'varchar'})
+    paginaWeb: string;
+
+    @Column({name: 'serie_fiel', type: 'varchar'})
+    serieFiel: string;
 
     @CreateDateColumn({name: 'fecha_creacion'})
     createdAt: Date;
@@ -30,7 +36,6 @@ export class PersonaMoral{
     // RELACIONES
 
     @OneToOne(() => Cliente, (cliente) => cliente.personaMoral)
-    @JoinColumn({ name: 'cliente_id' })
     cliente: Cliente;
 
     // DESCOMENTAR SI ES NECESARIO INCLUIR AL CREADOR DE DICHO OBJETO.

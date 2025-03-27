@@ -18,8 +18,8 @@ export class Cliente{
     @Column({name: 'serie_fiel', type: 'varchar', nullable: false})
     serieFiel: string;
 
-    @Column({name: 'pais', type: 'varchar', nullable: false})
-    pais: string;
+    @Column({name: 'actividad_economica', type: 'int'})
+    actividadEconomica: number;
 
     @CreateDateColumn({name: 'fecha_creacion'})
     createdAt: Date;
@@ -37,15 +37,17 @@ export class Cliente{
     tipoCliente: TipoCliente;
 
     @OneToOne(() => PersonaMoral, (moral) => moral.cliente)
+    @JoinColumn({ name: 'persona_moral_id' })
     personaMoral?: PersonaMoral;
   
     @OneToOne(() => PersonaFisica, (fisica) => fisica.cliente)
+    @JoinColumn({name: 'persona_fisica_id'})
     personaFisica?: PersonaFisica;
 
     @OneToMany(() => Persona, (persona) => persona.cliente)
     personas: Persona[];    
 
-    @ManyToOne(() => Usuario, {nullable: false})
+    @ManyToOne(() => Usuario, {nullable: false, eager: false})
     @JoinColumn({name: 'creador_id'})
     creador: Usuario;
 }

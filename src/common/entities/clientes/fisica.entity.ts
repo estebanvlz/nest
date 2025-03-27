@@ -13,9 +13,6 @@ export class PersonaFisica{
     @Column()
     profesion: number;
   
-    @Column({ name: 'actividad_economica' })
-    actividadEconomica: string;
-  
     @Column({ name: 'fecha_nacimiento', type: 'date' })
     fechaNacimiento: Date;
   
