@@ -6,7 +6,7 @@ import {
   ValidateNested,
   IsDefined,
 } from 'class-validator';
-import { FisicaDto } from './PersonaFisica.dto';
+import { FisicaDto } from './registrar-persona-fisica.dto';
 import { MoralDto } from './registrar-persona-moral.dto';
 
 export class RegistrarClienteDto {
