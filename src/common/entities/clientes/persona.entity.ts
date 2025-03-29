@@ -1,61 +1,42 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Usuario } from "../usuarios/usuario.entity";
-import { PersonaFisica } from "./fisica.entity";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, ManyToOne } from "typeorm";
 import { Cliente } from "./cliente.entity";
-
+import { PersonaFisica } from "./persona-fisica.entity";
+import { Usuario } from "../usuarios/usuario.entity";
 
 @Entity('personas')
-export class Persona{
-    
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Persona {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ name: 'nombre_1' })
-    nombre1: string;
-  
-    @Column({ name: 'nombre_2', nullable: true })
-    nombre2?: string;
-  
-    @Column({ name: 'apellido_patern' })
-    apellidoPaterno: string;
-  
-    @Column({ name: 'apellido_matern' })
-    apellidoMaterno: string;
-  
-    @Column({ name: 'fecha_nacimiento', type: 'date' })
-    fechaNacimiento: Date;
-  
-    @Column({ nullable: true })
-    rfc?: string;
-  
-    @Column()
-    curp: string;
-  
-    @Column({name: 'tipo_persona'})
-    tipoPersona: number;
-  
-    @Column({ name: 'genero', type: 'smallint', nullable: true })
-    genero?: number;  
+  @Column()
+  nombre1: string;
 
-    @CreateDateColumn({name: 'fecha_creacion'})
-    createdAt: Date;
-    
-    @UpdateDateColumn({name: 'fecha_actualizacion'})
-    updatedAt: Date;
-    
-    @DeleteDateColumn({name: 'fecha_eliminado'})
-    deletedAt: Date;
+  @Column({ nullable: true })
+  nombre2?: string;
 
-    // RELACIONES
+  @Column({name: 'apellido_paterno'})
+  apellidoPaterno: string;
 
-    @OneToOne(() => PersonaFisica, (fisica) => fisica.persona)
-    personaFisica: PersonaFisica;
+  @Column({name: 'apellido_materno'})
+  apellidoMaterno: string;
 
-    @ManyToOne(() => Cliente, (cliente) => cliente.personas)
-    cliente: Cliente;
+  @Column({name: 'fecha_nacimiento'})
+  fechaNacimiento: Date;
 
-    // DESCOMENTAR SI ES NECESARIO INCLUIR AL CREADOR DE DICHO OBJETO.
-    @ManyToOne(() => Usuario, {nullable: false})
-    @JoinColumn({name: 'creador_id'})
-    creador: Usuario;
+  @Column({ nullable: true })
+  curp: string;
+
+  @Column({ type: 'smallint', nullable: true })
+  genero: number;
+
+  @OneToOne(() => Cliente)
+  @JoinColumn({ name: 'cliente_id' })
+  cliente: Cliente;
+
+  @OneToOne(() => PersonaFisica, pf => pf.persona)
+  personaFisica: PersonaFisica;
+
+  @ManyToOne(() => Usuario, {nullable: false})
+  @JoinColumn({name: 'creador_id'})
+  usuario: Usuario;
 }
