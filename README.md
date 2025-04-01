@@ -20,6 +20,10 @@ Se esta utilizando la herramienta de Dev Containers para el desarrollo optimo.
 
 $ docker-compose up
 
+# acceder al contenedor
+
+$ docker exec -it nest-app-1 sh
+
 # una vez dentro del contenedor de la aplicacion
 
 $ npm run start:dev
