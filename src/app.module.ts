@@ -9,6 +9,7 @@ import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './modules/auth/strategies/jwt.strategy';
 import { ClientesModule } from './modules/clientes/clientes.module';
+import { EmpresasModule } from './modules/empresas/empresas.module';
 config();
 
 
@@ -21,7 +22,8 @@ config();
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '30m' },
     }),
-    ClientesModule 
+    ClientesModule,
+    EmpresasModule 
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
