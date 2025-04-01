@@ -1,15 +1,16 @@
-version: '3.8'
-
 services:
   app:
     build: .
+    image: antilavado:dev 
     ports:
       - "3000:3000"
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app       
+      - /usr/src/app/node_modules  
     environment:
-      NODE_ENV: development
-    command: npm run start:dev
+      - NODE_ENV=development
+    stdin_open: true  
+    tty: true
 
 #   postgres:
 #     image: postgres:16.8

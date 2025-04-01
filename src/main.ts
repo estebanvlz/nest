@@ -1,25 +1,21 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { JwtAuthGuard } from './common/guards/auth/jwt-auth.guard';
+import { SwaggerModule } from '@nestjs/swagger';
+import { swaggerConfig } from './config/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-    const reflector = app.get(Reflector);
-    app.useGlobalGuards(new JwtAuthGuard(reflector));
+  const reflector = app.get(Reflector);
   
-    // app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalGuards(new JwtAuthGuard(reflector));
 
-    const config = new DocumentBuilder()
-      .setTitle('Api')
-      .setDescription('Api')
-      .setVersion('1.0')
-      .addTag('Api')
-      .build();
-    const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('documentacion', app, documentFactory);
+  const documentFactory = () => SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('docs', app, documentFactory);
 
-  await app.listen(process.env.PORT ?? 3000);
+  app.enableCors();
+
+  await app.listen(3000);
 }
 bootstrap();
