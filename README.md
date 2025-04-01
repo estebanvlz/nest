@@ -1,4 +1,4 @@
-<!-- <p align="center">
+ <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
@@ -19,6 +19,10 @@ Se esta utilizando la herramienta de Dev Containers para el desarrollo optimo.
 # levantar el proyecto
 
 $ docker-compose up
+
+# acceder al contenedor
+
+$ docker exec -it nest-app-1 sh
 
 # una vez dentro del contenedor de la aplicacion
 
